@@ -1,6 +1,15 @@
 {
+  "name": "@snowplow/webview-tracker",
   "version": "0.1.0",
-  "license": "MIT",
+  "description": "WebView tracker for Snowplow",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowplow-incubator/snowplow-webview-tracker"
+  },
+  "contributors": [
+    "Matus Tomlein"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -31,16 +40,14 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "snowplow-webview-tracker",
-  "author": "Matúš Tomlein",
-  "module": "dist/snowplow-webview-tracker.esm.js",
+  "module": "dist/webview-tracker.esm.js",
   "size-limit": [
     {
-      "path": "dist/snowplow-webview-tracker.cjs.production.min.js",
+      "path": "dist/webview-tracker.cjs.production.min.js",
       "limit": "10 KB"
     },
     {
-      "path": "dist/snowplow-webview-tracker.esm.js",
+      "path": "dist/webview-tracker.esm.js",
       "limit": "10 KB"
     }
   ],

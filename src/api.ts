@@ -2,7 +2,9 @@
  * export interface for any Self-Describing JSON such as context or Self Describing events
  * @typeParam T - The type of the data object within a SelfDescribingJson
  */
-export type SelfDescribingJson<T extends Record<keyof T, unknown> = Record<string, unknown>> = {
+export type SelfDescribingJson<
+  T extends Record<keyof T, unknown> = Record<string, unknown>
+> = {
   /**
    * The schema string
    * @example 'iglu:com.snowplowanalytics.snowplow/web_page/jsonschema/1-0-0'
@@ -49,19 +51,19 @@ export interface StructuredEvent {
  */
 export interface ScreenView {
   /** The name of the screen viewed. */
-  name: string,
+  name: string;
   /** The id (UUID v4) of screen that was viewed. */
-  id: string,
+  id: string;
   /** The type of screen that was viewed. */
-  type?: string,
+  type?: string;
   /** The name of the previous screen that was viewed. */
-  previousName?: string,
+  previousName?: string;
   /** The type of screen that was viewed. */
-  previousType?: string,
+  previousType?: string;
   /** The id (UUID v4) of the previous screen that was viewed. */
-  previousId?: string,
+  previousId?: string;
   /** The type of transition that led to the screen being viewed. */
-  transitionType?: string,
+  transitionType?: string;
 }
 
 /**
@@ -70,12 +72,12 @@ export interface ScreenView {
  */
 export interface PageViewEvent {
   /** Override the page title */
-  title?: string | null
+  title?: string | null;
 }
 
 interface FullPageViewEvent extends PageViewEvent {
-  url?: string
-  referrer?: string
+  url?: string;
+  referrer?: string;
 }
 
 /** Additional data points to set when tracking an event */
@@ -86,8 +88,21 @@ export interface CommonEventProperties {
 
 /** Interface for communicating with the Android mobile tracker */
 export type SnowplowWebInterface = {
-  trackSelfDescribingEvent: (schema: string, data: string, context?: string, trackers?: Array<string>) => void
-  trackStructEvent: (category: string, action: string, label?: string, property?: string, value?: number, context?: string, trackers?: Array<string>) => void
+  trackSelfDescribingEvent: (
+    schema: string,
+    data: string,
+    context?: string,
+    trackers?: Array<string>
+  ) => void;
+  trackStructEvent: (
+    category: string,
+    action: string,
+    label?: string,
+    property?: string,
+    value?: number,
+    context?: string,
+    trackers?: Array<string>
+  ) => void;
   trackScreenView: (
     name: string,
     id: string,
@@ -98,27 +113,37 @@ export type SnowplowWebInterface = {
     transitionType?: string,
     context?: string,
     trackers?: Array<string>
-  ) => void
-  trackPageView: (pageUrl: string, pageTitle?: string, referrer?: string, context?: string, trackers?: Array<string>) => void
-}
+  ) => void;
+  trackPageView: (
+    pageUrl: string,
+    pageTitle?: string,
+    referrer?: string,
+    context?: string,
+    trackers?: Array<string>
+  ) => void;
+};
 
 /** Interface for communicating with the iOS mobile tracker */
 export type WebkitMessageHandler = {
   postMessage: (message: {
-    command: string,
-    event: StructuredEvent | SelfDescribingJson | ScreenView | FullPageViewEvent,
-    context?: Array<SelfDescribingJson> | null,
-    trackers?: Array<string>
-  }) => void
-}
+    command: string;
+    event:
+      | StructuredEvent
+      | SelfDescribingJson
+      | ScreenView
+      | FullPageViewEvent;
+    context?: Array<SelfDescribingJson> | null;
+    trackers?: Array<string>;
+  }) => void;
+};
 
 declare global {
   interface Window {
-    SnowplowWebInterface?: SnowplowWebInterface,
+    SnowplowWebInterface?: SnowplowWebInterface;
     webkit?: {
       messageHandlers?: {
-        snowplow?: WebkitMessageHandler
-      }
-    }
+        snowplow?: WebkitMessageHandler;
+      };
+    };
   }
 }

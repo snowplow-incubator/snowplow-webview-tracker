@@ -1,4 +1,9 @@
-import { trackPageView, trackScreenView, trackSelfDescribingEvent, trackStructEvent } from '../src';
+import {
+  trackPageView,
+  trackScreenView,
+  trackSelfDescribingEvent,
+  trackStructEvent,
+} from '../src';
 
 describe('iOS interface', () => {
   let windowSpy: any;
@@ -11,10 +16,10 @@ describe('iOS interface', () => {
       webkit: {
         messageHandlers: {
           snowplow: {
-            postMessage: messageHandler
-          }
-        }
-      }
+            postMessage: messageHandler,
+          },
+        },
+      },
     }));
   });
 
@@ -31,15 +36,15 @@ describe('iOS interface', () => {
         action: 'act',
         label: undefined,
         property: undefined,
-        value: undefined
+        value: undefined,
       },
       context: undefined,
-      trackers: ['ns1', 'ns2']
+      trackers: ['ns1', 'ns2'],
     });
   });
 
   it('tracks a screen view', () => {
-    trackScreenView({ name: 'sv', id: 'xxx' })
+    trackScreenView({ name: 'sv', id: 'xxx' });
 
     expect(messageHandler).toHaveBeenCalledWith({
       command: 'trackScreenView',
@@ -53,7 +58,7 @@ describe('iOS interface', () => {
         transitionType: undefined,
       },
       context: undefined,
-      trackers: undefined
+      trackers: undefined,
     });
   });
 
@@ -62,27 +67,29 @@ describe('iOS interface', () => {
       event: {
         schema: 'schema',
         data: {
-          abc: 1
-        }
-      }
-    })
+          abc: 1,
+        },
+      },
+    });
 
     expect(messageHandler).toHaveBeenCalledWith({
       command: 'trackSelfDescribingEvent',
       event: {
         schema: 'schema',
         data: {
-          abc: 1
-        }
+          abc: 1,
+        },
       },
       context: undefined,
-      trackers: undefined
+      trackers: undefined,
     });
   });
 
   it('tracks a page view', () => {
     Object.defineProperty(global.document, 'title', { value: 'Title' });
-    Object.defineProperty(global.document, 'referrer', { value: 'http://referrer.com' });
+    Object.defineProperty(global.document, 'referrer', {
+      value: 'http://referrer.com',
+    });
 
     trackPageView();
 
@@ -91,26 +98,29 @@ describe('iOS interface', () => {
       event: {
         url: 'http://test.com',
         title: 'Title',
-        referrer: 'http://referrer.com'
+        referrer: 'http://referrer.com',
       },
       context: undefined,
-      trackers: undefined
+      trackers: undefined,
     });
   });
 
   it('adds context entities', () => {
-    trackStructEvent({
-      category: 'cat',
-      action: 'act',
-      context: [
-        {
-          schema: 'schema',
-          data: {
-            abc: 1
-          }
-        }
-      ]
-    }, undefined);
+    trackStructEvent(
+      {
+        category: 'cat',
+        action: 'act',
+        context: [
+          {
+            schema: 'schema',
+            data: {
+              abc: 1,
+            },
+          },
+        ],
+      },
+      undefined
+    );
 
     expect(messageHandler).toHaveBeenCalledWith({
       command: 'trackStructEvent',
@@ -119,18 +129,17 @@ describe('iOS interface', () => {
         action: 'act',
         label: undefined,
         property: undefined,
-        value: undefined
+        value: undefined,
       },
       context: [
         {
           schema: 'schema',
           data: {
-            abc: 1
-          }
-        }
+            abc: 1,
+          },
+        },
       ],
-      trackers: undefined
+      trackers: undefined,
     });
   });
-
 });

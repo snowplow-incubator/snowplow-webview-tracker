@@ -1,4 +1,13 @@
-import { SelfDescribingEvent, StructuredEvent, PageViewEvent, CommonEventProperties, SnowplowWebInterface, WebkitMessageHandler, ScreenView, SelfDescribingJson } from "./api";
+import {
+  SelfDescribingEvent,
+  StructuredEvent,
+  PageViewEvent,
+  CommonEventProperties,
+  SnowplowWebInterface,
+  WebkitMessageHandler,
+  ScreenView,
+  SelfDescribingJson,
+} from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
   if (window.SnowplowWebInterface) {
@@ -7,9 +16,11 @@ function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
 }
 
 function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
-  if (window.webkit
-      && window.webkit.messageHandlers
-      && window.webkit.messageHandlers.snowplow) {
+  if (
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.snowplow
+  ) {
     callback(window.webkit.messageHandlers.snowplow);
   }
 }
@@ -30,13 +41,17 @@ function serializeContext(context?: Array<SelfDescribingJson> | null) {
  * @param event - The event information
  * @param trackers - The tracker identifiers which the event will be sent to
  */
-export function trackSelfDescribingEvent(event: SelfDescribingEvent & CommonEventProperties, trackers?: Array<string>) {
+export function trackSelfDescribingEvent(
+  event: SelfDescribingEvent & CommonEventProperties,
+  trackers?: Array<string>
+) {
   withAndroidInterface(webInterface => {
     webInterface.trackSelfDescribingEvent(
       event.event.schema,
       JSON.stringify(event.event.data),
       serializeContext(event.context),
-      trackers);
+      trackers
+    );
   });
 
   withIOSInterface(messageHandler => {
@@ -44,10 +59,10 @@ export function trackSelfDescribingEvent(event: SelfDescribingEvent & CommonEven
       command: 'trackSelfDescribingEvent',
       event: event.event,
       context: event.context,
-      trackers: trackers
+      trackers: trackers,
     });
   });
-};
+}
 
 /**
  * Track a structured event
@@ -58,7 +73,10 @@ export function trackSelfDescribingEvent(event: SelfDescribingEvent & CommonEven
  * @param event - The Structured Event properties
  * @param trackers - The tracker identifiers which the event will be sent to
  */
-export function trackStructEvent(event: StructuredEvent & CommonEventProperties, trackers?: Array<string>) {
+export function trackStructEvent(
+  event: StructuredEvent & CommonEventProperties,
+  trackers?: Array<string>
+) {
   withAndroidInterface(webInterface => {
     webInterface.trackStructEvent(
       event.category,
@@ -67,7 +85,8 @@ export function trackStructEvent(event: StructuredEvent & CommonEventProperties,
       event.property,
       event.value,
       serializeContext(event.context),
-      trackers);
+      trackers
+    );
   });
 
   withIOSInterface(messageHandler => {
@@ -78,10 +97,10 @@ export function trackStructEvent(event: StructuredEvent & CommonEventProperties,
         action: event.action,
         label: event.label,
         property: event.property,
-        value: event.value
+        value: event.value,
       },
       context: event.context,
-      trackers: trackers
+      trackers: trackers,
     });
   });
 }
@@ -92,13 +111,22 @@ export function trackStructEvent(event: StructuredEvent & CommonEventProperties,
  * @param event - The Page View Event properties
  * @param trackers - The tracker identifiers which the event will be sent to
  */
-export function trackPageView(event?: PageViewEvent & CommonEventProperties, trackers?: Array<string>) {
+export function trackPageView(
+  event?: PageViewEvent & CommonEventProperties,
+  trackers?: Array<string>
+) {
   let url = window.location.href;
   let title = event?.title ?? document.title;
   let referrer = document.referrer;
 
   withAndroidInterface(webInterface => {
-    webInterface.trackPageView(url, title, referrer, serializeContext(event?.context), trackers);
+    webInterface.trackPageView(
+      url,
+      title,
+      referrer,
+      serializeContext(event?.context),
+      trackers
+    );
   });
 
   withIOSInterface(messageHandler => {
@@ -107,10 +135,10 @@ export function trackPageView(event?: PageViewEvent & CommonEventProperties, tra
       event: {
         url: url,
         title: title,
-        referrer: referrer
+        referrer: referrer,
       },
       context: event?.context,
-      trackers: trackers
+      trackers: trackers,
     });
   });
 }
@@ -121,7 +149,10 @@ export function trackPageView(event?: PageViewEvent & CommonEventProperties, tra
  * @param event - The event information
  * @param trackers - The tracker identifiers which the event will be sent to
  */
-export function trackScreenView(event: ScreenView & CommonEventProperties, trackers?: Array<string>) {
+export function trackScreenView(
+  event: ScreenView & CommonEventProperties,
+  trackers?: Array<string>
+) {
   withAndroidInterface(webInterface => {
     webInterface.trackScreenView(
       event.name,
@@ -133,7 +164,7 @@ export function trackScreenView(event: ScreenView & CommonEventProperties, track
       event.transitionType,
       serializeContext(event.context),
       trackers
-    )
+    );
   });
 
   withIOSInterface(messageHandler => {
@@ -149,7 +180,7 @@ export function trackScreenView(event: ScreenView & CommonEventProperties, track
         transitionType: event.transitionType,
       },
       context: event.context,
-      trackers: trackers
+      trackers: trackers,
     });
   });
 }
