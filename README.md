@@ -13,20 +13,83 @@ Snowplow is a scalable open-source platform for rich, high quality, low-latency 
 
 The Snowplow WebView Tracker allows you to add analytics to your Web views embedded in mobile apps when using a [Snowplow][snowplow] pipeline.
 
-**Technical documentation can be found for each tracker in our [Documentation][webview-docs].**
+The WebView tracker should be integrated in Web apps used in Web views within native mobile apps. The tracker provides APIs to track Snowplow events. It forwards the events to the native app code to be tracked by the Snowplow mobile trackers ([iOS](https://github.com/snowplow/snowplow-objc-tracker) or [Android tracker](https://github.com/snowplow/snowplow-android-tracker)). The diagram below shows the interaction of the WebView and iOS/Android trackers in hybrid apps.
+
+```mermaid
+flowchart TB
+
+subgraph hybridApp[Hybrid Mobile App]
+
+    subgraph webView[Web View]
+        webViewCode[App logic]
+        webViewTracker[Snowplow WebView tracker]
+
+        webViewCode -- "Tracks events" --> webViewTracker
+    end
+
+    subgraph nativeCode[Native Code]
+        nativeAppCode[App logic]
+        nativeTracker[Snowplow iOS/Android tracker]
+
+        nativeAppCode -- "Tracks events" --> nativeTracker
+    end
+
+    webViewTracker -- "Forwards events" --> nativeTracker
+end
+
+subgraph cloud[Cloud]
+    collector[Snowplow Collector]
+end
+
+nativeTracker -- "Sends tracked events" --> collector
+```
+
+**Technical documentation can be found for each tracker in our [Hybrid Apps accelerator][webview-docs].**
 
 ## Quick Start
 
 ### Installation
 
+To install the WebView tracker in your JavaScript or TypeScript app, add the npm package:
+
+```bash
+npm install --save @snowplow/webview-tracker
+```
+
+You will then be able to use the functions provided by the WebView tracker as follows:
+
+```typescript
+import { trackSelfDescribingEvent } from '@snowplow/webview-tracker';
+```
+
+In addition, you will need to install the iOS or Android tracker in your native code and configure and initialize a tracker (see the [mobile tracker docs][mobile-tracker-setup-docs]). Afterwards, you will be able to subscribe to and track the events from the WebView tracker in a Web view by calling `Snowplow.subscribeToWebViewEvents(webView)`.
+
 ### Using the Tracker
+
+To track events, simply call their corresponding functions given the event data:
+
+```javascript
+trackSelfDescribingEvent({
+    event: {
+        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
+        data: {
+            'saveId': '4321',
+            'level': 23,
+            'difficultyLevel': 'HARD',
+            'dlContent': true
+        }
+    }
+});
+```
+
+See the [section on event tracking in the accelerator][webview-docs-tracking-events] to learn more about the APIs.
 
 ## Find Out More
 
-| Technical Docs                    | Setup Guide                 |
-|-----------------------------------|-----------------------------|
-| [![i1][techdocs-image]][techdocs] | [![i2][setup-image]][setup] |
-| [Technical Docs][techdocs]        | [Setup Guide][setup]        |
+| Accelerator                       |
+|-----------------------------------|
+| [![i1][techdocs-image]][techdocs] |
+| [Accelerator][techdocs]           |
 
 ## Maintainers
 
@@ -51,7 +114,9 @@ limitations under the License.
 [website]: https://snowplowanalytics.com
 [snowplow]: https://github.com/snowplow/snowplow
 [docs]: https://docs.snowplowanalytics.com/
-[webview-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/webview-tracker/
+[webview-docs]: https://github.com/snowplow-incubator/snowplow-hybrid-apps-accelerator
+[webview-docs-tracking-events]: https://github.com/snowplow-incubator/snowplow-hybrid-apps-accelerator/blob/main/tutorial/3-webview_usage.md
+[mobile-tracker-setup-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/mobile-trackers/mobile-trackers-v3-0/quick-start-guide/
 
 [gh-actions]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml
 [gh-actions-image]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml/badge.svg
@@ -64,8 +129,6 @@ limitations under the License.
 
 [techdocs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/webview-tracker/
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
-[setup]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/webview-tracker/quick-start-guide
-[setup-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/setup.png
 
 [contributing-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/contributing.png
 
