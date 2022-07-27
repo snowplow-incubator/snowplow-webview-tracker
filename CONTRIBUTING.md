@@ -1,179 +1,80 @@
-# Contributing to the Firebase Analytics Webview
+# Contributing
 
-We'd love for you to contribute to our source code and to make Firebase Analytics Webview even better than it is today! Here are the guidelines we'd like you to follow:
+The Snowplow WebView Tracker is maintained by the Engineering team at Snowplow Analytics. We welcome suggestions for improvements and bug fixes to all Snowplow Trackers.  
 
-- [Code of Conduct](#coc)
-- [Question or Problem?](#question)
-- [Issues and Bugs](#issue)
-- [Feature Requests](#feature)
-- [Submission Guidelines](#submit)
-- [Coding Rules](#rules)
-- [Signing the CLA](#cla)
+We are extremely grateful for all contributions we receive, whether that is reporting an issue or a change to the code which can be made in the form of a pull request.
 
-## <a name="coc"></a> Code of Conduct
+For support requests, please use our community support Discourse forum: https://discourse.snowplowanalytics.com/.
 
-As contributors and maintainers of the Firebase Analyics Webview project, we pledge to respect everyone who contributes by posting issues, updating documentation, submitting pull requests, providing feedback in comments, and any other activities.
+## Setting up an Environment
 
-Communication through any of Firebase's channels (GitHub, StackOverflow, Google+, Twitter, etc.) must be constructive and never resort to personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct.
+Instructions on how to build and run tests are available in the [README.md](README.md). The README will also list any requirements that you will need to install first before being able to build and run the tests.
 
-We promise to extend courtesy and respect to everyone involved in this project regardless of gender, gender identity, sexual orientation, disability, age, race, ethnicity, religion, or level of experience. We expect anyone contributing to the project to do the same.
+You should ensure you are comfortable building and testing the existing release before adding new functionality or fixing issues.
 
-If any member of the community violates this code of conduct, the maintainers of the Firebase Analyics Webview project may take action, removing issues, comments, and PRs or blocking accounts as deemed appropriate.
+## Issues
 
-If you are subject to or witness unacceptable behavior, or have any other concerns, please drop us a line at nivco@google.com.
+### Creating an issue
 
-## <a name="question"></a> Got a Question or Problem?
+The project contains an issue template which should help guiding you through the process. However, please keep in mind that support requests should go to our Discourse forum: https://discourse.snowplowanalytics.com/ and not GitHub issues.
 
-If you have questions about how to use the Firebase Analyics Webview, please direct these to [StackOverflow][stackoverflow] and use the `firebase` tag. We are also available on GitHub issues.
+It's also a good idea to log an issue before starting to work on a pull request to discuss it with the maintainers. A pull request is just one solution to a problem and it is often a good idea to talk about the problem with the maintainers first.
 
-If you feel that we're missing an important bit of documentation, feel free to
-file an issue so we can help. Here's an example to get you started:
+### Working on an issue
 
-```
-What are you trying to do or find out more about?
+If you see an issue you would like to work on, please let us know in the issue! That will help us in terms of scheduling and
+not doubling the amount of work.
 
-Where have you looked?
+If you don't know where to start contributing, you can look at
+[the issues labeled `good first issue`](https://github.com/snowplow-incubator/snowplow-webview-tracker/labels/category%3Agood_first_issue).
 
-Where did you expect to find this information?
-```
+## Pull requests
 
-## <a name="issue"></a> Found an Issue?
-If you find a bug in the source code or a mistake in the documentation, you can help us by
-submitting an issue to our [GitHub Repository][github]. Even better you can submit a Pull Request
-with a fix.
+These are a few guidelines to keep in mind when opening pull requests.
 
-See [below](#submit) for some guidelines.
+### Guidelines
 
-## <a name="submit"></a> Submission Guidelines
+Please supply a good PR description. These are very helpful and help the maintainers to understand _why_ the change has been made, not just _what_ changes have been made.  
 
-### Submitting an Issue
-Before you submit your issue search the archive, maybe your question was already answered.
+Please try and keep your PR to a single feature of fix. This might mean breaking up a feature into multiple PRs but this makes it easier for the maintainers to review and also reduces the risk in each change.
 
-If your issue appears to be a bug, and hasn't been reported, open a new issue.
-Help us to maximize the effort we can spend fixing issues and adding new
-features, by not reporting duplicate issues.  Providing the following information will increase the
-chances of your issue being dealt with quickly:
+Please review your own PR as you would do it you were a reviewer first. This is a great way to spot any mistakes you made when writing the change. Additionally, ensure your code compiles and all tests pass.
 
-* **Overview of the Issue** - if an error is being thrown a non-minified stack trace helps
-* **Motivation for or Use Case** - explain why this is a bug for you
-* **Browsers and Operating System** - is this a problem with all browsers or only IE9?
-* **Reproduce the Error** - provide a live example (using JSBin) or a unambiguous set of steps.
-* **Related Issues** - has a similar issue been reported before?
-* **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
-  causing the problem (line of code or commit)
+### Commit hygiene
 
-**If you get help, help others. Good karma rulez!**
+We keep a strict 1-to-1 correspondance between commits and issues, as such our commit messages are formatted in the following
+fashion:
 
-Here's a template to get you started:
+`Issue Description (closes #1234)`
 
-```
-Operating system:
-Operating system version:
+for example:
 
-What steps will reproduce the problem:
-1.
-2.
-3.
+`Fix Issue with Tracker (closes #1234)`
 
-What is the expected result?
+### Writing tests
 
-What happens instead of that?
+Whenever necessary, it's good practice to add the corresponding tests to whichever feature you are working on.  
+Any non-trivial PR must have tests and will not be accepted without them.
 
-Please provide any other information below, and attach a screenshot if possible.
-```
+### Feedback cycle
 
-### Submitting a Pull Request
-Before you submit your pull request consider the following guidelines:
+Reviews should happen fairly quickly during weekdays.  
+If you feel your pull request has been forgotten, please ping one or more maintainers in the pull request.
 
-* Search [GitHub](https://github.com/firebase/analytics-webview/pulls) for an open or closed Pull Request
-  that relates to your submission. You don't want to duplicate effort.
-* Please sign our [Contributor License Agreement (CLA)](#cla) before sending pull
-  requests. We cannot accept code without this.
-* Make your changes in a new git branch:
+### Getting your pull request merged
 
-     ```shell
-     git checkout -b my-fix-branch master
-     ```
+If your pull request is fairly chunky, there might be a non-trivial delay between the moment the pull request is approved and the moment it gets merged. This is because your pull request will have been scheduled for a specific milestone which might or might not be actively worked on by a maintainer at the moment.
 
-* Create your patch, **including appropriate test cases**.
-* Follow our [Coding Rules](#rules).
-* Avoid checking in files that shouldn't be tracked (e.g `node_modules`, `gulp-cache`, `.tmp`, `.idea`). We recommend using a [global](#global-gitignore) gitignore for this.
-* Make sure **not** to include a recompiled version of the files found in `/css` and `/js` as part of your PR. We will generate these automatically.
-* Commit your changes using a descriptive commit message.
+### Contributor license agreement
 
-     ```shell
-     git commit -a
-     ```
-  Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
+We require outside contributors to sign a Contributor license agreement (or CLA) before we can merge their pull requests.  
+You can find more information on the topic in [the dedicated wiki page](https://github.com/snowplow/snowplow/wiki/CLA).  
+The @snowplowcla bot will guide you through the process.
 
-* Build your changes locally to ensure all the tests pass:
+## Getting in touch
 
-    ```shell
-   gulp
-    ```
+### Community support requests
 
-* Push your branch to GitHub:
+Please do not log an issue if you are asking for support, all of our community support requests go through our Discourse forum: https://discourse.snowplowanalytics.com/.
 
-    ```shell
-    git push origin my-fix-branch
-    ```
-
-* In GitHub, send a pull request to `analytics-webview:master`.
-* If we suggest changes then:
-  * Make the required updates.
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
-
-    ```shell
-    git rebase master -i
-    git push origin my-fix-branch -f
-    ```
-
-That's it! Thank you for your contribution!
-
-#### After your pull request is merged
-
-After your pull request is merged, you can safely delete your branch and pull the changes
-from the main (upstream) repository:
-
-* Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
-
-    ```shell
-    git push origin --delete my-fix-branch
-    ```
-
-* Check out the master branch:
-
-    ```shell
-    git checkout master -f
-    ```
-
-* Delete the local branch:
-
-    ```shell
-    git branch -D my-fix-branch
-    ```
-
-* Update your master with the latest upstream version:
-
-    ```shell
-    git pull --ff upstream master
-    ```
-
-## <a name="rules"></a> Coding Rules
-
-We generally follow the [Google JavaScript style guide][js-style-guide].
-
-## <a name="cla"></a> Signing the CLA
-
-Please sign our [Contributor License Agreement][google-cla] (CLA) before sending pull requests. For any code
-changes to be accepted, the CLA must be signed. It's a quick process, we promise!
-
-*This guide was inspired by the [AngularJS contribution guidelines](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md).*
-
-[github]: https://github.com/firebase/analytics-webview
-[google-cla]: https://cla.developers.google.com
-[js-style-guide]: http://google.github.io/styleguide/javascriptguide.xml
-[py-style-guide]: http://google.github.io/styleguide/pyguide.html
-[jsbin]: http://jsbin.com/
-[stackoverflow]: http://stackoverflow.com/questions/tagged/firebase
-[global-gitignore]: https://help.github.com/articles/ignoring-files/#create-a-global-gitignore
+Posting your problem there ensures more people will see it and you should get support faster than creating a new issue on GitHub. Please do create a new issue on GitHub if you think you've found a bug though!
