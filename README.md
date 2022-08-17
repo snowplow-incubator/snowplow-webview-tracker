@@ -48,7 +48,7 @@ nativeTracker -- "Sends tracked events" --> collector
 
 ## Quick Start
 
-### Installation
+### Installation from npm
 
 To install the WebView tracker in your JavaScript or TypeScript app, add the npm package:
 
@@ -64,12 +64,38 @@ import { trackSelfDescribingEvent } from '@snowplow/webview-tracker';
 
 In addition, you will need to install the iOS or Android tracker in your native code and configure and initialize a tracker (see the [mobile tracker docs][mobile-tracker-setup-docs]). Afterwards, you will be able to subscribe to and track the events from the WebView tracker in a Web view by calling `Snowplow.subscribeToWebViewEvents(webView)`.
 
+### Installation with the Snowplow tag
+
+You may download the `sp.js` file from the Releases section Github, self-host it, and load to your page using the following tag:
+
+```html
+<script type="text/javascript" async=1>
+;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[]; p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments) };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1; n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script","{{URL to sp.js}}","snowplow"));
+</script>
+```
+
 ### Using the Tracker
 
 To track events, simply call their corresponding functions given the event data:
 
 ```javascript
 trackSelfDescribingEvent({
+    event: {
+        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
+        data: {
+            'saveId': '4321',
+            'level': 23,
+            'difficultyLevel': 'HARD',
+            'dlContent': true
+        }
+    }
+});
+```
+
+In case you loaded the tracker using the Snowplow tag, you will be able to access the APIs using `window.snowplow`:
+
+```javascript
+window.snowplow('trackSelfDescribingEvent', {
     event: {
         schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
         data: {

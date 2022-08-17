@@ -56,7 +56,7 @@ export function trackSelfDescribingEvent(
   event: SelfDescribingEvent & CommonEventProperties,
   trackers?: Array<string>
 ) {
-  withAndroidInterface(webInterface => {
+  withAndroidInterface((webInterface) => {
     webInterface.trackSelfDescribingEvent(
       event.event.schema,
       JSON.stringify(event.event.data),
@@ -65,7 +65,7 @@ export function trackSelfDescribingEvent(
     );
   });
 
-  withIOSInterface(messageHandler => {
+  withIOSInterface((messageHandler) => {
     messageHandler.postMessage({
       command: 'trackSelfDescribingEvent',
       event: event.event,
@@ -88,7 +88,7 @@ export function trackStructEvent(
   event: StructuredEvent & CommonEventProperties,
   trackers?: Array<string>
 ) {
-  withAndroidInterface(webInterface => {
+  withAndroidInterface((webInterface) => {
     webInterface.trackStructEvent(
       event.category,
       event.action,
@@ -100,7 +100,7 @@ export function trackStructEvent(
     );
   });
 
-  withIOSInterface(messageHandler => {
+  withIOSInterface((messageHandler) => {
     messageHandler.postMessage({
       command: 'trackStructEvent',
       event: {
@@ -130,7 +130,7 @@ export function trackPageView(
   let title = event?.title ?? document.title;
   let referrer = document.referrer;
 
-  withAndroidInterface(webInterface => {
+  withAndroidInterface((webInterface) => {
     webInterface.trackPageView(
       url,
       title,
@@ -140,7 +140,7 @@ export function trackPageView(
     );
   });
 
-  withIOSInterface(messageHandler => {
+  withIOSInterface((messageHandler) => {
     messageHandler.postMessage({
       command: 'trackPageView',
       event: {
@@ -164,7 +164,7 @@ export function trackScreenView(
   event: ScreenView & CommonEventProperties,
   trackers?: Array<string>
 ) {
-  withAndroidInterface(webInterface => {
+  withAndroidInterface((webInterface) => {
     webInterface.trackScreenView(
       event.name,
       event.id,
@@ -178,7 +178,7 @@ export function trackScreenView(
     );
   });
 
-  withIOSInterface(messageHandler => {
+  withIOSInterface((messageHandler) => {
     messageHandler.postMessage({
       command: 'trackScreenView',
       event: {

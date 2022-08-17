@@ -10,53 +10,45 @@
   "contributors": [
     "Matus Tomlein"
   ],
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.modern.module.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "microbundle",
+    "build-iife": "microbundle src/tag.ts -o dist/sp.js --name=snowplow --format=iife",
+    "dev": "microbundle watch",
+    "lint": "prettier src test -c",
+    "format": "prettier src test --write",
+    "prepack": "rm -rf dist && npm run build",
+    "release": "npm run prepack && source .env && npx np",
+    "test": "jest"
+  },
   "files": [
     "dist",
     "src"
   ],
-  "engines": {
-    "node": ">=10"
-  },
-  "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test",
-    "lint": "tsdx lint",
-    "prepare": "tsdx build",
-    "size": "size-limit",
-    "analyze": "size-limit --why"
-  },
   "peerDependencies": {},
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
-  },
   "prettier": {
     "printWidth": 80,
     "semi": true,
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "module": "dist/webview-tracker.esm.js",
-  "size-limit": [
-    {
-      "path": "dist/webview-tracker.cjs.production.min.js",
-      "limit": "10 KB"
-    },
-    {
-      "path": "dist/webview-tracker.esm.js",
-      "limit": "10 KB"
-    }
-  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
+  },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^7.0.8",
-    "husky": "^8.0.1",
-    "size-limit": "^7.0.8",
-    "tsdx": "^0.14.1",
-    "tslib": "^2.4.0",
+    "@types/jest": "^28.1.7",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
+    "microbundle": "^0.15.1",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.8",
     "typescript": "^4.7.4"
   }
 }
