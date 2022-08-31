@@ -1,0 +1,48 @@
+name: Publish
+
+on:
+  push:
+    tags:
+    - '*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Use Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - id: publish
+        name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+
+      - name: Build IIFE
+        run: npm run build-iife
+
+      - name: Release
+        uses: softprops/action-gh-release@v0.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          name: Version ${{ steps.publish.outputs.version }}
+          draft: false
+          prerelease: ${{ contains(steps.publish.outputs.version, '-') }}
+          files: |
+            dist/sp.js

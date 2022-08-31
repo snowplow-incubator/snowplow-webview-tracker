@@ -1,0 +1,55 @@
+{
+  "name": "@snowplow/webview-tracker",
+  "version": "0.1.0",
+  "description": "WebView tracker for Snowplow",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/snowplow-incubator/snowplow-webview-tracker"
+  },
+  "contributors": [
+    "Matus Tomlein"
+  ],
+  "source": "src/index.ts",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.modern.module.js",
+  "exports": "./dist/index.modern.mjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "microbundle",
+    "build-iife": "microbundle src/tag.ts -o dist/sp.js --name=snowplow --format=iife",
+    "dev": "microbundle watch",
+    "lint": "prettier src test -c",
+    "format": "prettier src test --write",
+    "prepack": "rm -rf dist && npm run build",
+    "release": "npm run prepack && source .env && npx np",
+    "test": "jest"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "peerDependencies": {},
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.7",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^28.1.3",
+    "microbundle": "^0.15.1",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.8",
+    "typescript": "^4.7.4"
+  }
+}
