@@ -112,10 +112,10 @@ See the [section on event tracking in the accelerator][webview-docs-tracking-eve
 
 ## Find Out More
 
-| Accelerator                       |
-|-----------------------------------|
-| [![i1][techdocs-image]][techdocs] |
-| [Accelerator][techdocs]           |
+| Accelerator                           |
+|---------------------------------------|
+| [![i1][techdocs-image]][webview-docs] |
+| [Accelerator][webview-docs]           |
 
 ## Maintainers
 
@@ -140,8 +140,8 @@ limitations under the License.
 [website]: https://snowplowanalytics.com
 [snowplow]: https://github.com/snowplow/snowplow
 [docs]: https://docs.snowplowanalytics.com/
-[webview-docs]: https://github.com/snowplow-incubator/snowplow-hybrid-apps-accelerator
-[webview-docs-tracking-events]: https://github.com/snowplow-incubator/snowplow-hybrid-apps-accelerator/blob/main/tutorial/3-webview_usage.md
+[webview-docs]: https://snowplow-incubator.github.io/snowplow-hybrid-apps-accelerator/
+[webview-docs-tracking-events]: https://snowplow-incubator.github.io/snowplow-hybrid-apps-accelerator/tracking/3-webview_usage/
 [mobile-tracker-setup-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/mobile-trackers/mobile-trackers-v3-0/quick-start-guide/
 
 [gh-actions]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml
@@ -150,10 +150,9 @@ limitations under the License.
 [license]: https://www.apache.org/licenses/LICENSE-2.0
 [license-image]: https://img.shields.io/badge/license-Apache--2-blue.svg?style=flat
 
-[release-image]: TODO
-[releases]: TODO
+[release-image]: https://img.shields.io/npm/v/@snowplow/webview-tracker
+[releases]: https://github.com/snowplow-incubator/snowplow-webview-tracker/releases
 
-[techdocs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/webview-tracker/
 [techdocs-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/techdocs.png
 
 [contributing-image]: https://d3i6fms1cm1j0i.cloudfront.net/github/images/contributing.png
