@@ -18,6 +18,7 @@ import {
   WebkitMessageHandler,
   ScreenView,
   SelfDescribingJson,
+  ReactNativeInterface,
 } from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
@@ -33,6 +34,12 @@ function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
     window.webkit.messageHandlers.snowplow
   ) {
     callback(window.webkit.messageHandlers.snowplow);
+  }
+}
+
+function withReactNativeInterface(callback: (_: ReactNativeInterface) => void) {
+  if (window.ReactNativeWebView) {
+    callback(window.ReactNativeWebView);
   }
 }
 
@@ -65,13 +72,21 @@ export function trackSelfDescribingEvent(
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackSelfDescribingEvent',
       event: event.event,
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -100,8 +115,8 @@ export function trackStructEvent(
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackStructEvent',
       event: {
         category: event.category,
@@ -112,7 +127,15 @@ export function trackStructEvent(
       },
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -140,8 +163,8 @@ export function trackPageView(
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackPageView',
       event: {
         url: url,
@@ -150,7 +173,15 @@ export function trackPageView(
       },
       context: event?.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -178,8 +209,8 @@ export function trackScreenView(
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackScreenView',
       event: {
         name: event.name,
@@ -192,6 +223,14 @@ export function trackScreenView(
       },
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
