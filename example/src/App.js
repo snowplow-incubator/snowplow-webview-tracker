@@ -3,7 +3,7 @@ import './App.css';
 import { trackSelfDescribingEvent, trackPageView, trackScreenView, trackStructEvent } from '@snowplow/webview-tracker';
 import { v4 as uuidv4 } from 'uuid';
 
-function trackEvent() {
+function trackEvents() {
   trackSelfDescribingEvent({
     event: {
       schema: 'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
@@ -46,7 +46,7 @@ function App() {
         <p>
           Hello from a Webview!
         </p>
-        <button onClick={trackEvent}>
+        <button onClick={trackEvents}>
           Track events
         </button>
       </header>
