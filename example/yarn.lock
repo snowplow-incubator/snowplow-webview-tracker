@@ -1635,7 +1635,7 @@
     "@sinonjs/commons" "^1.7.0"
 
 "@snowplow/webview-tracker@file:..":
-  version "0.1.0"
+  version "0.2.0"
 
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"

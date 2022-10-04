@@ -1,3 +1,10 @@
+# 0.2.0
+
+* Add support for React Native (#5)
+* Add example app (#6)
+* Send null values instead of undefined to Android backend (#12)
+* Fix links to README (#9)
+
 # 0.1.0
 
 * Initial release.
