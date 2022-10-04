@@ -48,17 +48,17 @@ describe('Tag interface', () => {
     expect(trackStructEventStub).toHaveBeenCalledWith(
       'cat',
       'act',
-      undefined,
-      undefined,
-      undefined,
-      undefined,
+      null,
+      null,
+      null,
+      null,
       ['ns1', 'ns2']
     );
     expect(trackSelfDescribingStub).toHaveBeenCalledWith(
       'schema',
       '{"abc":1}',
-      undefined,
-      undefined
+      null,
+      null
     );
 
     windowSpy.mockRestore();

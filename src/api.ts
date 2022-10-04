@@ -102,35 +102,35 @@ export type SnowplowWebInterface = {
   trackSelfDescribingEvent: (
     schema: string,
     data: string,
-    context?: string,
-    trackers?: Array<string>
+    context: string | null,
+    trackers: Array<string> | null
   ) => void;
   trackStructEvent: (
     category: string,
     action: string,
-    label?: string,
-    property?: string,
-    value?: number,
-    context?: string,
-    trackers?: Array<string>
+    label: string | null,
+    property: string | null,
+    value: number | null,
+    context: string | null,
+    trackers: Array<string> | null
   ) => void;
   trackScreenView: (
     name: string,
     id: string,
-    type?: string,
-    previousName?: string,
-    previousId?: string,
-    previousType?: string,
-    transitionType?: string,
-    context?: string,
-    trackers?: Array<string>
+    type: string | null,
+    previousName: string | null,
+    previousId: string | null,
+    previousType: string | null,
+    transitionType: string | null,
+    context: string | null,
+    trackers: Array<string> | null
   ) => void;
   trackPageView: (
     pageUrl: string,
-    pageTitle?: string,
-    referrer?: string,
-    context?: string,
-    trackers?: Array<string>
+    pageTitle: string | null,
+    referrer: string | null,
+    context: string | null,
+    trackers: Array<string> | null
   ) => void;
 };
 
