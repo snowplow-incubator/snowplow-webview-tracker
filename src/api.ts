@@ -148,6 +148,11 @@ export type WebkitMessageHandler = {
   }) => void;
 };
 
+/** Interface for communicating with the React Native tracker */
+export type ReactNativeInterface = {
+  postMessage: (message: string) => void;
+};
+
 declare global {
   interface Window {
     SnowplowWebInterface?: SnowplowWebInterface;
@@ -156,5 +161,6 @@ declare global {
         snowplow?: WebkitMessageHandler;
       };
     };
+    ReactNativeWebView?: ReactNativeInterface;
   }
 }
