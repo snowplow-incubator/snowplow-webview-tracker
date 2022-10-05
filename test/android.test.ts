@@ -45,10 +45,10 @@ describe('Android interface', () => {
     expect(trackStructEventStub).toHaveBeenCalledWith(
       'cat',
       'act',
-      undefined,
-      undefined,
-      undefined,
-      undefined,
+      null,
+      null,
+      null,
+      null,
       ['ns1', 'ns2']
     );
   });
@@ -58,13 +58,13 @@ describe('Android interface', () => {
     expect(trackScreenViewStub).toHaveBeenCalledWith(
       'sv',
       'xxx',
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
     );
   });
 
@@ -81,8 +81,8 @@ describe('Android interface', () => {
     expect(trackSelfDescribingStub).toHaveBeenCalledWith(
       'schema',
       '{"abc":1}',
-      undefined,
-      undefined
+      null,
+      null
     );
   });
 
@@ -97,8 +97,8 @@ describe('Android interface', () => {
       'http://test.com',
       'Title',
       'http://referrer.com',
-      undefined,
-      undefined
+      null,
+      null
     );
   });
 
@@ -122,11 +122,11 @@ describe('Android interface', () => {
     expect(trackStructEventStub).toHaveBeenCalledWith(
       'cat',
       'act',
-      undefined,
-      undefined,
-      undefined,
+      null,
+      null,
+      null,
       '[{"schema":"schema","data":{"abc":1}}]',
-      undefined
+      null
     );
   });
 });

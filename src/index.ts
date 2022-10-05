@@ -47,7 +47,7 @@ function serializeContext(context?: Array<SelfDescribingJson> | null) {
   if (context) {
     return JSON.stringify(context);
   } else {
-    return undefined;
+    return null;
   }
 }
 
@@ -68,7 +68,7 @@ export function trackSelfDescribingEvent(
       event.event.schema,
       JSON.stringify(event.event.data),
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
@@ -107,11 +107,11 @@ export function trackStructEvent(
     webInterface.trackStructEvent(
       event.category,
       event.action,
-      event.label,
-      event.property,
-      event.value,
+      event.label || null,
+      event.property || null,
+      event.value || null,
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
@@ -159,7 +159,7 @@ export function trackPageView(
       title,
       referrer,
       serializeContext(event?.context),
-      trackers
+      trackers || null
     );
   });
 
@@ -199,13 +199,13 @@ export function trackScreenView(
     webInterface.trackScreenView(
       event.name,
       event.id,
-      event.type,
-      event.previousName,
-      event.previousId,
-      event.previousType,
-      event.transitionType,
+      event.type || null,
+      event.previousName || null,
+      event.previousId || null,
+      event.previousType || null,
+      event.transitionType || null,
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
