@@ -18,6 +18,7 @@ import {
   WebkitMessageHandler,
   ScreenView,
   SelfDescribingJson,
+  ReactNativeInterface,
 } from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
@@ -36,11 +37,17 @@ function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
   }
 }
 
+function withReactNativeInterface(callback: (_: ReactNativeInterface) => void) {
+  if (window.ReactNativeWebView) {
+    callback(window.ReactNativeWebView);
+  }
+}
+
 function serializeContext(context?: Array<SelfDescribingJson> | null) {
   if (context) {
     return JSON.stringify(context);
   } else {
-    return undefined;
+    return null;
   }
 }
 
@@ -61,17 +68,25 @@ export function trackSelfDescribingEvent(
       event.event.schema,
       JSON.stringify(event.event.data),
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackSelfDescribingEvent',
       event: event.event,
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -92,16 +107,16 @@ export function trackStructEvent(
     webInterface.trackStructEvent(
       event.category,
       event.action,
-      event.label,
-      event.property,
-      event.value,
+      event.label || null,
+      event.property || null,
+      event.value || null,
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackStructEvent',
       event: {
         category: event.category,
@@ -112,7 +127,15 @@ export function trackStructEvent(
       },
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -136,12 +159,12 @@ export function trackPageView(
       title,
       referrer,
       serializeContext(event?.context),
-      trackers
+      trackers || null
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackPageView',
       event: {
         url: url,
@@ -150,7 +173,15 @@ export function trackPageView(
       },
       context: event?.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }
 
@@ -168,18 +199,18 @@ export function trackScreenView(
     webInterface.trackScreenView(
       event.name,
       event.id,
-      event.type,
-      event.previousName,
-      event.previousId,
-      event.previousType,
-      event.transitionType,
+      event.type || null,
+      event.previousName || null,
+      event.previousId || null,
+      event.previousType || null,
+      event.transitionType || null,
       serializeContext(event.context),
-      trackers
+      trackers || null
     );
   });
 
-  withIOSInterface((messageHandler) => {
-    messageHandler.postMessage({
+  const getMessage = () => {
+    return {
       command: 'trackScreenView',
       event: {
         name: event.name,
@@ -192,6 +223,14 @@ export function trackScreenView(
       },
       context: event.context,
       trackers: trackers,
-    });
+    };
+  };
+
+  withIOSInterface((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
   });
 }

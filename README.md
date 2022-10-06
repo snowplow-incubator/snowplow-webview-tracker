@@ -13,7 +13,7 @@ Snowplow is a scalable open-source platform for rich, high quality, low-latency 
 
 The Snowplow WebView Tracker allows you to add analytics to your Web views embedded in mobile apps when using a [Snowplow][snowplow] pipeline.
 
-The WebView tracker should be integrated in Web apps used in Web views within native mobile apps. The tracker provides APIs to track Snowplow events. It forwards the events to the native app code to be tracked by the Snowplow mobile trackers ([iOS](https://github.com/snowplow/snowplow-objc-tracker) or [Android tracker](https://github.com/snowplow/snowplow-android-tracker)). The diagram below shows the interaction of the WebView and iOS/Android trackers in hybrid apps.
+The WebView tracker should be integrated in Web apps used in Web views within native mobile apps. The tracker provides APIs to track Snowplow events. It forwards the events to the native app code to be tracked by the Snowplow mobile trackers ([iOS][ios-tracker], [Android tracker][android-tracker], or [React Native][react-native-tracker]). The diagram below shows the interaction of the WebView and mobile trackers in hybrid apps.
 
 ```mermaid
 flowchart TB
@@ -29,7 +29,7 @@ subgraph hybridApp[Hybrid Mobile App]
 
     subgraph nativeCode[Native Code]
         nativeAppCode[App logic]
-        nativeTracker[Snowplow iOS/Android tracker]
+        nativeTracker[Snowplow iOS/Android/React Native tracker]
 
         nativeAppCode -- "Tracks events" --> nativeTracker
     end
@@ -108,14 +108,14 @@ window.snowplow('trackSelfDescribingEvent', {
 });
 ```
 
-See the [section on event tracking in the accelerator][webview-docs-tracking-events] to learn more about the APIs.
+Please refer to the [tracker documentation][webview-docs] to learn more about the APIs.
 
 ## Find Out More
 
-| Accelerator                           |
+| Technical Docs                        |
 |---------------------------------------|
 | [![i1][techdocs-image]][webview-docs] |
-| [Accelerator][webview-docs]           |
+| [Technical Docs][webview-docs]        |
 
 ## Maintainers
 
@@ -137,12 +137,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-[website]: https://snowplowanalytics.com
+[website]: https://snowplow.io
 [snowplow]: https://github.com/snowplow/snowplow
-[docs]: https://docs.snowplowanalytics.com/
-[webview-docs]: https://snowplow-incubator.github.io/snowplow-hybrid-apps-accelerator/
-[webview-docs-tracking-events]: https://snowplow-incubator.github.io/snowplow-hybrid-apps-accelerator/tracking/3-webview_usage/
-[mobile-tracker-setup-docs]: https://docs.snowplowanalytics.com/docs/collecting-data/collecting-from-own-applications/mobile-trackers/mobile-trackers-v3-0/quick-start-guide/
+[docs]: https://docs.snowplow.io/
+[webview-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/webview-tracker/
+[mobile-tracker-setup-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/mobile-trackers/installation-and-set-up/
+
+[ios-tracker]: https://github.com/snowplow/snowplow-objc-tracker
+[android-tracker]: https://github.com/snowplow/snowplow-android-tracker
+[react-native-tracker]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/react-native-tracker/
 
 [gh-actions]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml
 [gh-actions-image]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml/badge.svg

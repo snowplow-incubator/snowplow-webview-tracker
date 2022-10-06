@@ -16,22 +16,16 @@ import {
   trackStructEvent,
 } from '../src';
 
-describe('Android interface', () => {
+describe('React Native interface', () => {
   let windowSpy: any;
-  let trackStructEventStub = jest.fn();
-  let trackScreenViewStub = jest.fn();
-  let trackPageViewStub = jest.fn();
-  let trackSelfDescribingStub = jest.fn();
+  let messageHandler = jest.fn();
 
   beforeEach(() => {
     windowSpy = jest.spyOn(window, 'window', 'get');
     windowSpy.mockImplementation(() => ({
       location: { href: 'http://test.com' },
-      SnowplowWebInterface: {
-        trackStructEvent: trackStructEventStub,
-        trackScreenView: trackScreenViewStub,
-        trackSelfDescribingEvent: trackSelfDescribingStub,
-        trackPageView: trackPageViewStub,
+      ReactNativeWebView: {
+        postMessage: messageHandler,
       },
     }));
   });
@@ -42,29 +36,40 @@ describe('Android interface', () => {
 
   it('track a structured view', () => {
     trackStructEvent({ category: 'cat', action: 'act' }, ['ns1', 'ns2']);
-    expect(trackStructEventStub).toHaveBeenCalledWith(
-      'cat',
-      'act',
-      null,
-      null,
-      null,
-      null,
-      ['ns1', 'ns2']
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackStructEvent',
+        event: {
+          category: 'cat',
+          action: 'act',
+          label: undefined,
+          property: undefined,
+          value: undefined,
+        },
+        context: undefined,
+        trackers: ['ns1', 'ns2'],
+      })
     );
   });
 
   it('tracks a screen view', () => {
     trackScreenView({ name: 'sv', id: 'xxx' });
-    expect(trackScreenViewStub).toHaveBeenCalledWith(
-      'sv',
-      'xxx',
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
+
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackScreenView',
+        event: {
+          name: 'sv',
+          id: 'xxx',
+          type: undefined,
+          previousName: undefined,
+          previousId: undefined,
+          previousType: undefined,
+          transitionType: undefined,
+        },
+        context: undefined,
+        trackers: undefined,
+      })
     );
   });
 
@@ -78,11 +83,18 @@ describe('Android interface', () => {
       },
     });
 
-    expect(trackSelfDescribingStub).toHaveBeenCalledWith(
-      'schema',
-      '{"abc":1}',
-      null,
-      null
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackSelfDescribingEvent',
+        event: {
+          schema: 'schema',
+          data: {
+            abc: 1,
+          },
+        },
+        context: undefined,
+        trackers: undefined,
+      })
     );
   });
 
@@ -93,12 +105,18 @@ describe('Android interface', () => {
     });
 
     trackPageView();
-    expect(trackPageViewStub).toHaveBeenCalledWith(
-      'http://test.com',
-      'Title',
-      'http://referrer.com',
-      null,
-      null
+
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackPageView',
+        event: {
+          url: 'http://test.com',
+          title: 'Title',
+          referrer: 'http://referrer.com',
+        },
+        context: undefined,
+        trackers: undefined,
+      })
     );
   });
 
@@ -119,14 +137,26 @@ describe('Android interface', () => {
       undefined
     );
 
-    expect(trackStructEventStub).toHaveBeenCalledWith(
-      'cat',
-      'act',
-      null,
-      null,
-      null,
-      '[{"schema":"schema","data":{"abc":1}}]',
-      null
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackStructEvent',
+        event: {
+          category: 'cat',
+          action: 'act',
+          label: undefined,
+          property: undefined,
+          value: undefined,
+        },
+        context: [
+          {
+            schema: 'schema',
+            data: {
+              abc: 1,
+            },
+          },
+        ],
+        trackers: undefined,
+      })
     );
   });
 });
