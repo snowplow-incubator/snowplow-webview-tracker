@@ -14,7 +14,7 @@
  * @typeParam T - The type of the data object within a SelfDescribingJson
  */
 export type SelfDescribingJson<
-  T extends Record<keyof T, unknown> = Record<string, unknown>
+  T extends Record<keyof T, unknown> = Record<string, unknown>,
 > = {
   /**
    * The schema string
