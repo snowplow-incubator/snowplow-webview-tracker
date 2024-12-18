@@ -97,6 +97,63 @@ export interface CommonEventProperties {
   context?: Array<SelfDescribingJson> | null;
 }
 
+/**
+ * Event properties that are sent directly, not as part of a self-describing schema.
+ * These properties will have their own column in the warehouse event table.
+ */
+export interface AtomicProperties {
+  /** Type of event, e.g. "pp" for page ping. */
+  eventName?: string;
+  /** Version of the tracker used. */
+  trackerVersion?: string;
+  /** The browser useragent. */
+  useragent?: string;
+  /** For page view events. The page URL. */
+  url?: string;
+  /** For page view events. The page title. */
+  title?: string | null;
+  /** For page view events. The referrer URL. */
+  referrer?: string;
+  /** For structured events. Name for the group of objects you want to track. */
+  category: string;
+  /** For structured events. Defines the type of user interaction for the web object. */
+  action: string;
+  /** For structured events. Identifies the specific object being actioned. */
+  label?: string;
+  /** For structured events. Describes the object or the action performed on it. */
+  property?: string;
+  /** For structured events. Quantifies or further describes the user action. */
+  value?: number;
+  /** For page ping events. The minimum X offset. */
+  minXOffset?: number;
+  /** For page ping events. The maximum X offset. */
+  maxXOffset?: number;
+  /** For page ping events. The minimum Y offset. */
+  maxYOffset?: number;
+  /** For page ping events. The maximum Y offset. */
+  minYOffset?: number;
+}
+
+/** Interface for communicating with the Android mobile tracker */
+export type SnowplowWebInterfaceV2 = {
+  trackWebViewEvent: (
+    atomicProperties: string,
+    selfDescribingEventData?: string | null,
+    context?: string | null,
+    trackers?: Array<string> | null
+  ) => void;
+};
+
+/** Interface for communicating with the iOS mobile tracker */
+export type WebkitMessageHandlerV2 = {
+  postMessage: (message: {
+    atomicProperties: string;
+    selfDescribingEventData?: string | null;
+    context?: string | null;
+    trackers?: Array<string> | null;
+  }) => void;
+};
+
 /** Interface for communicating with the Android mobile tracker */
 export type SnowplowWebInterface = {
   trackSelfDescribingEvent: (
@@ -156,9 +213,11 @@ export type ReactNativeInterface = {
 declare global {
   interface Window {
     SnowplowWebInterface?: SnowplowWebInterface;
+    SnowplowWebInterfaceV2?: SnowplowWebInterfaceV2;
     webkit?: {
       messageHandlers?: {
         snowplow?: WebkitMessageHandler;
+        snowplowV2?: WebkitMessageHandlerV2;
       };
     };
     ReactNativeWebView?: ReactNativeInterface;

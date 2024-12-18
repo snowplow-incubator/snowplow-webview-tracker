@@ -15,10 +15,13 @@ import {
   PageViewEvent,
   CommonEventProperties,
   SnowplowWebInterface,
+  SnowplowWebInterfaceV2,
   WebkitMessageHandler,
+  WebkitMessageHandlerV2,
   ScreenView,
   SelfDescribingJson,
   ReactNativeInterface,
+  AtomicProperties,
 } from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
@@ -43,12 +46,81 @@ function withReactNativeInterface(callback: (_: ReactNativeInterface) => void) {
   }
 }
 
+function withAndroidInterfaceV2(callback: (_: SnowplowWebInterfaceV2) => void) {
+  if (window.SnowplowWebInterfaceV2) {
+    callback(window.SnowplowWebInterfaceV2);
+  }
+}
+
+function withIOSInterfaceV2(callback: (_: WebkitMessageHandlerV2) => void) {
+  if (
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.snowplowV2
+  ) {
+    callback(window.webkit.messageHandlers.snowplowV2);
+  }
+}
+
 function serializeContext(context?: Array<SelfDescribingJson> | null) {
   if (context) {
     return JSON.stringify(context);
   } else {
     return null;
   }
+}
+
+function serializeSelfDescribingEvent(event?: SelfDescribingEvent | null) {
+  if (event) {
+    return JSON.stringify(event);
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Track a web event.
+ *
+ * @param atomicProperties - The atomic properties
+ * @param event - Self-describing event information
+ * @param entities - Entities to attach to the event
+ * @param trackers - The tracker identifiers which the event will be sent to
+ */
+export function trackWebViewEvent(
+  atomicProperties: AtomicProperties,
+  event?: SelfDescribingEvent | null,
+  entities?: Array<SelfDescribingJson> | null,
+  trackers?: Array<string>
+) {
+  const stringifiedAtomicProperties = JSON.stringify(atomicProperties);
+  const stringifiedEvent = serializeSelfDescribingEvent(event);
+  const stringifiedEntities = serializeContext(entities);
+
+  withAndroidInterfaceV2((webInterface) => {
+    webInterface.trackWebViewEvent(
+      stringifiedAtomicProperties,
+      stringifiedEvent,
+      stringifiedEntities,
+      trackers || null
+    );
+  });
+
+  const getMessage = () => {
+    return {
+      atomicProperties: stringifiedAtomicProperties,
+      selfDescribingEventData: stringifiedEvent,
+      entities: stringifiedEntities,
+      trackers: trackers,
+    };
+  };
+
+  withIOSInterfaceV2((messageHandler) => {
+    messageHandler.postMessage(getMessage());
+  });
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessage()));
+  });
 }
 
 /**
