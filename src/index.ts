@@ -30,6 +30,12 @@ function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
   }
 }
 
+function withAndroidInterfaceV2(callback: (_: SnowplowWebInterfaceV2) => void) {
+  if (window.SnowplowWebInterfaceV2) {
+    callback(window.SnowplowWebInterfaceV2);
+  }
+}
+
 function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
   if (
     window.webkit &&
@@ -40,18 +46,6 @@ function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
   }
 }
 
-function withReactNativeInterface(callback: (_: ReactNativeInterface) => void) {
-  if (window.ReactNativeWebView) {
-    callback(window.ReactNativeWebView);
-  }
-}
-
-function withAndroidInterfaceV2(callback: (_: SnowplowWebInterfaceV2) => void) {
-  if (window.SnowplowWebInterfaceV2) {
-    callback(window.SnowplowWebInterfaceV2);
-  }
-}
-
 function withIOSInterfaceV2(callback: (_: WebkitMessageHandlerV2) => void) {
   if (
     window.webkit &&
@@ -59,6 +53,12 @@ function withIOSInterfaceV2(callback: (_: WebkitMessageHandlerV2) => void) {
     window.webkit.messageHandlers.snowplowV2
   ) {
     callback(window.webkit.messageHandlers.snowplowV2);
+  }
+}
+
+function withReactNativeInterface(callback: (_: ReactNativeInterface) => void) {
+  if (window.ReactNativeWebView) {
+    callback(window.ReactNativeWebView);
   }
 }
 
