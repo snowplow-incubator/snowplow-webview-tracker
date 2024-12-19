@@ -17,18 +17,16 @@ function trackEvents() {
       useragent: 'useragent',
     },
     {
-      schema: 'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
+      schema:
+        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
       data: {
-        targetUrl: 'http://a-target-url.com',
+        label: 'webview test',
       },
     },
     [
       {
-        schema:
-          'iglu:com.snowplowanalytics.snowplow/link_click/jsonschema/1-0-1',
-        data: {
-          targetUrl: 'http://in-context.com',
-        },
+        schema: 'iglu:com.apple.swiftui/open_immersive_space/jsonschema/1-0-0',
+        data: {},
       },
     ],
     ['sp1']
