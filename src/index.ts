@@ -101,7 +101,7 @@ export function trackWebViewEvent(
       stringifiedAtomicProperties,
       stringifiedEvent,
       stringifiedEntities,
-      trackers || null
+      trackers
     );
   });
 
