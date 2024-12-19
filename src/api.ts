@@ -111,13 +111,13 @@ export interface AtomicProperties {
   /** For page view events. The page URL. */
   url?: string;
   /** For page view events. The page title. */
-  title?: string | null;
+  title?: string;
   /** For page view events. The referrer URL. */
   referrer?: string;
   /** For structured events. Name for the group of objects you want to track. */
-  category: string;
+  category?: string;
   /** For structured events. Defines the type of user interaction for the web object. */
-  action: string;
+  action?: string;
   /** For structured events. Identifies the specific object being actioned. */
   label?: string;
   /** For structured events. Describes the object or the action performed on it. */

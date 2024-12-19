@@ -13,16 +13,20 @@ import {
   trackWebViewEvent,
 } from '../src';
 
-describe('Android interface', () => {
+describe('iOS interface', () => {
   let windowSpy: any;
-  let trackWebViewStub = jest.fn();
+  let messageHandler = jest.fn();
 
   beforeEach(() => {
     windowSpy = jest.spyOn(window, 'window', 'get');
     windowSpy.mockImplementation(() => ({
       location: { href: 'http://test.com' },
-      SnowplowWebInterfaceV2: {
-        trackWebViewEvent: trackWebViewStub,
+      webkit: {
+        messageHandlers: {
+          snowplowV2: {
+            postMessage: messageHandler,
+          },
+        },
       },
     }));
   });
@@ -32,22 +36,22 @@ describe('Android interface', () => {
   });
 
   it('tracks a webview primitive event', () => {
-    const atomic = {
-      eventName: 'se',
-      trackerVersion: 'webview-0.3.0',
-      category: 'cat',
-      action: 'act',
-    };
+      const atomic = {
+        eventName: 'pv',
+        trackerVersion: 'webview',
+        url: 'http://test.com',
+        title: 'test title',
+      };
 
-    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+      trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
 
-    expect(trackWebViewStub).toHaveBeenCalledWith(
-      JSON.stringify(atomic),
-      null,
-      null,
-      ['ns1', 'ns2']
-    );
-  });
+      expect(messageHandler).toHaveBeenCalledWith({
+        atomicProperties: JSON.stringify(atomic),
+        selfDescribingEventData: null,
+        entities: null,
+        trackers: ['ns1', 'ns2']
+      });
+    });
 
   it('tracks a webview self-describing event', () => {
     const atomic = {
@@ -65,12 +69,12 @@ describe('Android interface', () => {
 
     trackWebViewEvent(atomic, event, null, null);
 
-    expect(trackWebViewStub).toHaveBeenCalledWith(
-      JSON.stringify(atomic),
-      JSON.stringify(event),
-      null,
-      null
-    );
+    expect(messageHandler).toHaveBeenCalledWith({
+        atomicProperties: JSON.stringify(atomic),
+        selfDescribingEventData: JSON.stringify(event),
+        entities: null,
+        trackers: null
+      });
   });
 
   it('adds context entities', () => {
@@ -83,11 +87,11 @@ describe('Android interface', () => {
 
     trackWebViewEvent({}, null, [entity], null);
 
-    expect(trackWebViewStub).toHaveBeenCalledWith(
-      '{}',
-      null,
-      JSON.stringify([entity]),
-      null
-    );
+    expect(messageHandler).toHaveBeenCalledWith({
+        atomicProperties: '{}',
+        selfDescribingEventData: null,
+        entities: JSON.stringify([entity]),
+        trackers: null
+      });
   });
 });

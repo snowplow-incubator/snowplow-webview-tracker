@@ -90,7 +90,7 @@ export function trackWebViewEvent(
   atomicProperties: AtomicProperties,
   event?: SelfDescribingEvent | null,
   entities?: Array<SelfDescribingJson> | null,
-  trackers?: Array<string>
+  trackers?: Array<string> | null
 ) {
   const stringifiedAtomicProperties = JSON.stringify(atomicProperties);
   const stringifiedEvent = serializeSelfDescribingEvent(event);
@@ -105,7 +105,7 @@ export function trackWebViewEvent(
     );
   });
 
-  const getMessage = () => {
+  const getMessageIOS = () => {
     return {
       atomicProperties: stringifiedAtomicProperties,
       selfDescribingEventData: stringifiedEvent,
@@ -115,11 +115,23 @@ export function trackWebViewEvent(
   };
 
   withIOSInterfaceV2((messageHandler) => {
-    messageHandler.postMessage(getMessage());
+    messageHandler.postMessage(getMessageIOS());
   });
 
+  const getMessageRN = () => {
+    return {
+      command: 'trackWebViewEvent',
+      event: {
+        selfDescribingEventData: event,
+        ...atomicProperties
+      },
+      context: entities,
+      trackers: trackers,
+    };
+  };
+
   withReactNativeInterface((rnInterface) => {
-    rnInterface.postMessage(JSON.stringify(getMessage()));
+    rnInterface.postMessage(JSON.stringify(getMessageRN()));
   });
 }
 

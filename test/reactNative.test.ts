@@ -14,6 +14,7 @@ import {
   trackScreenView,
   trackSelfDescribingEvent,
   trackStructEvent,
+  trackWebViewEvent,
 } from '../src';
 
 describe('React Native interface', () => {
@@ -32,6 +33,90 @@ describe('React Native interface', () => {
 
   afterEach(() => {
     windowSpy.mockRestore();
+  });
+
+  it('track a webview primitive event', () => {
+    const atomic = {
+      eventName: 'pp',
+      trackerVersion: 'webview',
+      url: 'http://test.com',
+      minXOffset: 20,
+      maxXOffset: 30,
+      minYOffset: 40,
+      maxYOffset: 50,
+    };
+
+    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackWebViewEvent',
+        event: {
+          selfDescribingEventData: null,
+          eventName: 'pp',
+          trackerVersion: 'webview',
+          url: 'http://test.com',
+          minXOffset: 20,
+          maxXOffset: 30,
+          minYOffset: 40,
+          maxYOffset: 50,
+        },
+        context: null,
+        trackers: ['ns1', 'ns2'],
+      })
+    );
+  });
+
+  it('tracks a webview self-describing event', () => {
+    const atomic = {
+      eventName: 'ue',
+      trackerVersion: 'webview',
+    };
+    const event = {
+      event: {
+        schema: 'schema',
+        data: {
+          abc: 1,
+        },
+      },
+    }
+
+    trackWebViewEvent(atomic, event, null, null);
+
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackWebViewEvent',
+        event: {
+          selfDescribingEventData: event,
+          eventName: 'ue',
+          trackerVersion: 'webview',
+        },
+        context: null,
+        trackers: null,
+      })
+    );
+  });
+
+  it('tracks a webview event with entities', () => {
+    const entity = {
+      schema: 'iglu:schema',
+      data: {
+        abc: 1,
+      },
+    };
+
+    trackWebViewEvent({}, null, [entity], null);
+
+    expect(messageHandler).toHaveBeenCalledWith(
+      JSON.stringify({
+        command: 'trackWebViewEvent',
+        event: {
+          selfDescribingEventData: null,
+        },
+        context: [entity],
+        trackers: null,
+      })
+    );
   });
 
   it('track a structured view', () => {
