@@ -79,7 +79,7 @@ describe('React Native interface', () => {
           abc: 1,
         },
       },
-    }
+    };
 
     trackWebViewEvent(atomic, event, null, null);
 

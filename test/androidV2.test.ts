@@ -9,9 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import {
-  trackWebViewEvent,
-} from '../src';
+import { trackWebViewEvent } from '../src';
 
 describe('Android interface', () => {
   let windowSpy: any;
@@ -61,7 +59,7 @@ describe('Android interface', () => {
           abc: 1,
         },
       },
-    }
+    };
 
     trackWebViewEvent(atomic, event, null, null);
 

@@ -123,7 +123,7 @@ export function trackWebViewEvent(
       command: 'trackWebViewEvent',
       event: {
         selfDescribingEventData: event,
-        ...atomicProperties
+        ...atomicProperties,
       },
       context: entities,
       trackers: trackers,

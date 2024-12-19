@@ -9,9 +9,7 @@
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
-import {
-  trackWebViewEvent,
-} from '../src';
+import { trackWebViewEvent } from '../src';
 
 describe('iOS interface', () => {
   let windowSpy: any;
@@ -36,22 +34,22 @@ describe('iOS interface', () => {
   });
 
   it('tracks a webview primitive event', () => {
-      const atomic = {
-        eventName: 'pv',
-        trackerVersion: 'webview',
-        url: 'http://test.com',
-        title: 'test title',
-      };
+    const atomic = {
+      eventName: 'pv',
+      trackerVersion: 'webview',
+      url: 'http://test.com',
+      title: 'test title',
+    };
 
-      trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
 
-      expect(messageHandler).toHaveBeenCalledWith({
-        atomicProperties: JSON.stringify(atomic),
-        selfDescribingEventData: null,
-        entities: null,
-        trackers: ['ns1', 'ns2']
-      });
+    expect(messageHandler).toHaveBeenCalledWith({
+      atomicProperties: JSON.stringify(atomic),
+      selfDescribingEventData: null,
+      entities: null,
+      trackers: ['ns1', 'ns2'],
     });
+  });
 
   it('tracks a webview self-describing event', () => {
     const atomic = {
@@ -65,16 +63,16 @@ describe('iOS interface', () => {
           abc: 1,
         },
       },
-    }
+    };
 
     trackWebViewEvent(atomic, event, null, null);
 
     expect(messageHandler).toHaveBeenCalledWith({
-        atomicProperties: JSON.stringify(atomic),
-        selfDescribingEventData: JSON.stringify(event),
-        entities: null,
-        trackers: null
-      });
+      atomicProperties: JSON.stringify(atomic),
+      selfDescribingEventData: JSON.stringify(event),
+      entities: null,
+      trackers: null,
+    });
   });
 
   it('adds context entities', () => {
@@ -88,10 +86,10 @@ describe('iOS interface', () => {
     trackWebViewEvent({}, null, [entity], null);
 
     expect(messageHandler).toHaveBeenCalledWith({
-        atomicProperties: '{}',
-        selfDescribingEventData: null,
-        entities: JSON.stringify([entity]),
-        trackers: null
-      });
+      atomicProperties: '{}',
+      selfDescribingEventData: null,
+      entities: JSON.stringify([entity]),
+      trackers: null,
+    });
   });
 });
