@@ -69,9 +69,9 @@ export interface AtomicProperties {
   /** For page ping events. The maximum X offset. */
   maxXOffset?: number;
   /** For page ping events. The minimum Y offset. */
-  maxYOffset?: number;
-  /** For page ping events. The maximum Y offset. */
   minYOffset?: number;
+  /** For page ping events. The maximum Y offset. */
+  maxYOffset?: number;
 }
 
 /**
