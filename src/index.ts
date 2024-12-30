@@ -79,6 +79,22 @@ function serializeSelfDescribingEvent(event?: SelfDescribingEvent | null) {
 }
 
 /**
+ * Check if a V2 mobile interface is available.
+ */
+export function hasMobileInterface(): boolean {
+  const isIOS =
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.snowplowV2;
+
+  if (window.SnowplowWebInterfaceV2 || isIOS || window.ReactNativeWebView) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
  * Track a web event.
  *
  * @param atomicProperties - The atomic properties
