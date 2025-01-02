@@ -57,7 +57,7 @@ npm install --save @snowplow/webview-tracker
 You will then be able to use the functions provided by the WebView tracker as follows:
 
 ```typescript
-import { trackWebViewEvent } from '@snowplow/webview-tracker';
+import { trackSelfDescribingEvent } from '@snowplow/webview-tracker';
 ```
 
 In addition, you will need to install the [iOS][ios-tracker], [Android][android-tracker], or [React Native][react-native-tracker] tracker in your native code and configure and initialize a tracker. Afterwards, you will be able to subscribe to and track the events from the WebView tracker in a WebView.
@@ -77,36 +77,32 @@ You may download the `sp.js` file from the Releases section Github, self-host it
 To track events, simply call their corresponding functions given the event data:
 
 ```javascript
-trackWebViewEvent({
-    properties: {
-      eventName: 'ue',
-      trackerVersion: 'webview',
-    },
+trackSelfDescribingEvent({
     event: {
-      schema:
-        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
-      data: {
-        label: 'webview test',
-      },
-    },
-  });
+        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
+        data: {
+            'saveId': '4321',
+            'level': 23,
+            'difficultyLevel': 'HARD',
+            'dlContent': true
+        }
+    }
+});
 ```
 
 In case you loaded the tracker using the Snowplow tag, you will be able to access the APIs using `window.snowplow`:
 
 ```javascript
-window.snowplow('trackWebViewEvent', {
-    properties: {
-      eventName: 'ue',
-      trackerVersion: 'webview',
-    },
+window.snowplow('trackSelfDescribingEvent', {
     event: {
-      schema:
-        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
-      data: {
-        label: 'webview test',
-      },
-    },
+        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
+        data: {
+            'saveId': '4321',
+            'level': 23,
+            'difficultyLevel': 'HARD',
+            'dlContent': true
+        }
+    }
 });
 ```
 
@@ -142,12 +138,12 @@ limitations under the License.
 [website]: https://snowplow.io
 [snowplow]: https://github.com/snowplow/snowplow
 [docs]: https://docs.snowplow.io/
-[webview-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/webview-tracker/
-[mobile-tracker-setup-docs]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/mobile-trackers/installation-and-set-up/
+[webview-docs]: https://docs.snowplow.io/docs/sources/trackers/webview-tracker/
+[mobile-tracker-setup-docs]: https://docs.snowplow.io/docs/sources/trackers/mobile-trackers/installation-and-set-up/
 
-[ios-tracker]: https://github.com/snowplow/snowplow-objc-tracker
+[ios-tracker]: https:///github.com/snowplow/snowplow-ios-tracker
 [android-tracker]: https://github.com/snowplow/snowplow-android-tracker
-[react-native-tracker]: https://docs.snowplow.io/docs/collecting-data/collecting-from-own-applications/react-native-tracker/
+[react-native-tracker]: https://github.com/snowplow/snowplow-javascript-tracker
 
 [gh-actions]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml
 [gh-actions-image]: https://github.com/snowplow-incubator/snowplow-webview-tracker/actions/workflows/build.yml/badge.svg
