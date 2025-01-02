@@ -11,9 +11,9 @@ Snowplow is a scalable open-source platform for rich, high quality, low-latency 
 
 ## Snowplow WebView Tracker Overview
 
-The Snowplow WebView Tracker allows you to add analytics to your Web views embedded in mobile apps when using a [Snowplow][snowplow] pipeline.
+The Snowplow WebView Tracker allows you to add analytics to your WebViews embedded in mobile apps when using a [Snowplow][snowplow] pipeline.
 
-The WebView tracker should be integrated in Web apps used in Web views within native mobile apps. The tracker provides APIs to track Snowplow events. It forwards the events to the native app code to be tracked by the Snowplow mobile trackers ([iOS][ios-tracker], [Android tracker][android-tracker], or [React Native][react-native-tracker]). The diagram below shows the interaction of the WebView and mobile trackers in hybrid apps.
+The WebView tracker should be integrated in Web apps used in WebViews within native mobile apps. The tracker provides APIs to track Snowplow events. It forwards the events to the native app code to be tracked by the Snowplow mobile trackers ([iOS][ios-tracker], [Android][android-tracker], or [React Native][react-native-tracker]). The diagram below shows the interaction of the WebView and mobile trackers in hybrid apps.
 
 ```mermaid
 flowchart TB
@@ -44,8 +44,6 @@ end
 nativeTracker -- "Sends tracked events" --> collector
 ```
 
-**Technical documentation can be found for each tracker in our [Hybrid Apps accelerator][webview-docs].**
-
 ## Quick Start
 
 ### Installation from npm
@@ -59,10 +57,10 @@ npm install --save @snowplow/webview-tracker
 You will then be able to use the functions provided by the WebView tracker as follows:
 
 ```typescript
-import { trackSelfDescribingEvent } from '@snowplow/webview-tracker';
+import { trackWebViewEvent } from '@snowplow/webview-tracker';
 ```
 
-In addition, you will need to install the iOS or Android tracker in your native code and configure and initialize a tracker (see the [mobile tracker docs][mobile-tracker-setup-docs]). Afterwards, you will be able to subscribe to and track the events from the WebView tracker in a Web view by calling `Snowplow.subscribeToWebViewEvents(webView)`.
+In addition, you will need to install the [iOS][ios-tracker], [Android][android-tracker], or [React Native][react-native-tracker] tracker in your native code and configure and initialize a tracker. Afterwards, you will be able to subscribe to and track the events from the WebView tracker in a WebView.
 
 ### Installation with the Snowplow tag
 
@@ -79,32 +77,36 @@ You may download the `sp.js` file from the Releases section Github, self-host it
 To track events, simply call their corresponding functions given the event data:
 
 ```javascript
-trackSelfDescribingEvent({
+trackWebViewEvent({
+    properties: {
+      eventName: 'ue',
+      trackerVersion: 'webview',
+    },
     event: {
-        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
-        data: {
-            'saveId': '4321',
-            'level': 23,
-            'difficultyLevel': 'HARD',
-            'dlContent': true
-        }
-    }
-});
+      schema:
+        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
+      data: {
+        label: 'webview test',
+      },
+    },
+  });
 ```
 
 In case you loaded the tracker using the Snowplow tag, you will be able to access the APIs using `window.snowplow`:
 
 ```javascript
-window.snowplow('trackSelfDescribingEvent', {
+window.snowplow('trackWebViewEvent', {
+    properties: {
+      eventName: 'ue',
+      trackerVersion: 'webview',
+    },
     event: {
-        schema: 'iglu:com.example_company/save_game/jsonschema/1-0-2',
-        data: {
-            'saveId': '4321',
-            'level': 23,
-            'difficultyLevel': 'HARD',
-            'dlContent': true
-        }
-    }
+      schema:
+        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
+      data: {
+        label: 'webview test',
+      },
+    },
 });
 ```
 
@@ -113,14 +115,14 @@ Please refer to the [tracker documentation][webview-docs] to learn more about th
 ## Find Out More
 
 | Technical Docs                        |
-|---------------------------------------|
+| ------------------------------------- |
 | [![i1][techdocs-image]][webview-docs] |
 | [Technical Docs][webview-docs]        |
 
 ## Maintainers
 
 | Contributing                                 |
-|----------------------------------------------|
+| -------------------------------------------- |
 | [![i4][contributing-image]](CONTRIBUTING.md) |
 | [Contributing](CONTRIBUTING.md)              |
 

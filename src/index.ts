@@ -15,15 +15,24 @@ import {
   PageViewEvent,
   CommonEventProperties,
   SnowplowWebInterface,
+  SnowplowWebInterfaceV2,
   WebkitMessageHandler,
+  WebkitMessageHandlerV2,
   ScreenView,
   SelfDescribingJson,
   ReactNativeInterface,
+  WebViewEvent,
 } from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
   if (window.SnowplowWebInterface) {
     callback(window.SnowplowWebInterface);
+  }
+}
+
+function withAndroidInterfaceV2(callback: (_: SnowplowWebInterfaceV2) => void) {
+  if (window.SnowplowWebInterfaceV2) {
+    callback(window.SnowplowWebInterfaceV2);
   }
 }
 
@@ -34,6 +43,16 @@ function withIOSInterface(callback: (_: WebkitMessageHandler) => void) {
     window.webkit.messageHandlers.snowplow
   ) {
     callback(window.webkit.messageHandlers.snowplow);
+  }
+}
+
+function withIOSInterfaceV2(callback: (_: WebkitMessageHandlerV2) => void) {
+  if (
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.snowplowV2
+  ) {
+    callback(window.webkit.messageHandlers.snowplowV2);
   }
 }
 
@@ -49,6 +68,85 @@ function serializeContext(context?: Array<SelfDescribingJson> | null) {
   } else {
     return null;
   }
+}
+
+function serializeSelfDescribingEvent(event?: SelfDescribingEvent) {
+  if (event) {
+    return JSON.stringify(event);
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Check if a V2 mobile interface is available.
+ */
+export function hasMobileInterface(): boolean {
+  const isIOS =
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.snowplowV2;
+
+  if (window.SnowplowWebInterfaceV2 || isIOS || window.ReactNativeWebView) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+/**
+ * Track a web event.
+ * This method allows the tracking of any Snowplow event. It is used by the Snowplow web tracker WebView plugin to forward events to mobile trackers.
+ * Use this method to track either Self-Describing events, which are described by schemas, or that are not i.e. PageView and Structured events.
+ *
+ * @param event - Event information
+ * @param trackers - The tracker identifiers which the event will be sent to
+ */
+export function trackWebViewEvent(
+  event: WebViewEvent & CommonEventProperties,
+  trackers?: Array<string>
+) {
+  const stringifiedAtomicProperties = JSON.stringify(event.properties);
+  const stringifiedEvent = serializeSelfDescribingEvent(event.event);
+  const stringifiedEntities = serializeContext(event.context);
+
+  withAndroidInterfaceV2((webInterface) => {
+    webInterface.trackWebViewEvent(
+      stringifiedAtomicProperties,
+      stringifiedEvent,
+      stringifiedEntities,
+      trackers || null
+    );
+  });
+
+  const getMessageIOS = () => {
+    return {
+      atomicProperties: stringifiedAtomicProperties,
+      selfDescribingEventData: stringifiedEvent,
+      entities: stringifiedEntities,
+      trackers: trackers || null,
+    };
+  };
+
+  withIOSInterfaceV2((messageHandler) => {
+    messageHandler.postMessage(getMessageIOS());
+  });
+
+  const getMessageRN = () => {
+    return {
+      command: 'trackWebViewEvent',
+      event: {
+        selfDescribingEventData: event.event,
+        ...event.properties,
+      },
+      context: event.context,
+      trackers: trackers,
+    };
+  };
+
+  withReactNativeInterface((rnInterface) => {
+    rnInterface.postMessage(JSON.stringify(getMessageRN()));
+  });
 }
 
 /**
