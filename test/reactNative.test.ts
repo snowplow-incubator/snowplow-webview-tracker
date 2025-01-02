@@ -46,13 +46,12 @@ describe('React Native interface', () => {
       maxYOffset: 50,
     };
 
-    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+    trackWebViewEvent({ properties: atomic }, ['ns1', 'ns2']);
 
     expect(messageHandler).toHaveBeenCalledWith(
       JSON.stringify({
         command: 'trackWebViewEvent',
         event: {
-          selfDescribingEventData: null,
           eventName: 'pp',
           trackerVersion: 'webview',
           url: 'http://test.com',
@@ -61,7 +60,6 @@ describe('React Native interface', () => {
           minYOffset: 40,
           maxYOffset: 50,
         },
-        context: null,
         trackers: ['ns1', 'ns2'],
       })
     );
@@ -81,7 +79,7 @@ describe('React Native interface', () => {
       },
     };
 
-    trackWebViewEvent(atomic, event, null, null);
+    trackWebViewEvent({ properties: atomic, event: event });
 
     expect(messageHandler).toHaveBeenCalledWith(
       JSON.stringify({
@@ -91,8 +89,6 @@ describe('React Native interface', () => {
           eventName: 'ue',
           trackerVersion: 'webview',
         },
-        context: null,
-        trackers: null,
       })
     );
   });
@@ -105,16 +101,14 @@ describe('React Native interface', () => {
       },
     };
 
-    trackWebViewEvent({}, null, [entity], null);
+    trackWebViewEvent({ properties: {}, context: [entity] });
 
     expect(messageHandler).toHaveBeenCalledWith(
       JSON.stringify({
         command: 'trackWebViewEvent',
-        event: {
-          selfDescribingEventData: null,
-        },
+        event: {},
         context: [entity],
-        trackers: null,
+        trackers: undefined,
       })
     );
   });

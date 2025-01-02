@@ -21,7 +21,7 @@ import {
   ScreenView,
   SelfDescribingJson,
   ReactNativeInterface,
-  AtomicProperties,
+  WebViewEvent,
 } from './api';
 
 function withAndroidInterface(callback: (_: SnowplowWebInterface) => void) {
@@ -70,7 +70,7 @@ function serializeContext(context?: Array<SelfDescribingJson> | null) {
   }
 }
 
-function serializeSelfDescribingEvent(event?: SelfDescribingEvent | null) {
+function serializeSelfDescribingEvent(event?: SelfDescribingEvent) {
   if (event) {
     return JSON.stringify(event);
   } else {
@@ -103,21 +103,19 @@ export function hasMobileInterface(): boolean {
  * @param trackers - The tracker identifiers which the event will be sent to
  */
 export function trackWebViewEvent(
-  atomicProperties: AtomicProperties,
-  event?: SelfDescribingEvent | null,
-  entities?: Array<SelfDescribingJson> | null,
-  trackers?: Array<string> | null
+  event: WebViewEvent & CommonEventProperties,
+  trackers?: Array<string>
 ) {
-  const stringifiedAtomicProperties = JSON.stringify(atomicProperties);
-  const stringifiedEvent = serializeSelfDescribingEvent(event);
-  const stringifiedEntities = serializeContext(entities);
+  const stringifiedAtomicProperties = JSON.stringify(event.properties);
+  const stringifiedEvent = serializeSelfDescribingEvent(event.event);
+  const stringifiedEntities = serializeContext(event.context);
 
   withAndroidInterfaceV2((webInterface) => {
     webInterface.trackWebViewEvent(
       stringifiedAtomicProperties,
       stringifiedEvent,
       stringifiedEntities,
-      trackers
+      trackers || null
     );
   });
 
@@ -126,7 +124,7 @@ export function trackWebViewEvent(
       atomicProperties: stringifiedAtomicProperties,
       selfDescribingEventData: stringifiedEvent,
       entities: stringifiedEntities,
-      trackers: trackers,
+      trackers: trackers || null,
     };
   };
 
@@ -138,10 +136,10 @@ export function trackWebViewEvent(
     return {
       command: 'trackWebViewEvent',
       event: {
-        selfDescribingEventData: event,
-        ...atomicProperties,
+        selfDescribingEventData: event.event,
+        ...event.properties,
       },
-      context: entities,
+      context: event.context,
       trackers: trackers,
     };
   };

@@ -134,6 +134,11 @@ export interface CommonEventProperties {
   context?: Array<SelfDescribingJson> | null;
 }
 
+export interface WebViewEvent {
+  properties: AtomicProperties;
+  event?: SelfDescribingEvent;
+}
+
 /** Interface for communicating with the Android mobile tracker */
 export type SnowplowWebInterface = {
   trackSelfDescribingEvent: (

@@ -37,7 +37,7 @@ describe('Android interface', () => {
       action: 'act',
     };
 
-    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+    trackWebViewEvent({ properties: atomic }, ['ns1', 'ns2']);
 
     expect(trackWebViewStub).toHaveBeenCalledWith(
       JSON.stringify(atomic),
@@ -61,7 +61,7 @@ describe('Android interface', () => {
       },
     };
 
-    trackWebViewEvent(atomic, event, null, null);
+    trackWebViewEvent({ properties: atomic, event: event });
 
     expect(trackWebViewStub).toHaveBeenCalledWith(
       JSON.stringify(atomic),
@@ -79,7 +79,7 @@ describe('Android interface', () => {
       },
     };
 
-    trackWebViewEvent({}, null, [entity], null);
+    trackWebViewEvent({ properties: {}, context: [entity] });
 
     expect(trackWebViewStub).toHaveBeenCalledWith(
       '{}',

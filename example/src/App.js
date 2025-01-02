@@ -12,23 +12,26 @@ import { v4 as uuidv4 } from 'uuid';
 function trackEvents() {
   trackWebViewEvent(
     {
-      eventName: 'ue',
-      trackerVersion: 'webview',
-      useragent: 'useragent',
-    },
-    {
-      schema:
-        'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
-      data: {
-        label: 'webview test',
+      properties: {
+        eventName: 'ue',
+        trackerVersion: 'webview',
+        useragent: 'useragent',
       },
-    },
-    [
-      {
-        schema: 'iglu:com.apple.swiftui/open_immersive_space/jsonschema/1-0-0',
-        data: {},
+      event: {
+        schema:
+          'iglu:com.snowplowanalytics.snowplow/button_click/jsonschema/1-0-0',
+        data: {
+          label: 'webview test',
+        },
       },
-    ],
+      context: [
+        {
+          schema:
+            'iglu:com.apple.swiftui/open_immersive_space/jsonschema/1-0-0',
+          data: {},
+        },
+      ],
+    },
     ['sp1']
   );
 

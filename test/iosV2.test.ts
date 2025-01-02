@@ -41,7 +41,7 @@ describe('iOS interface', () => {
       title: 'test title',
     };
 
-    trackWebViewEvent(atomic, null, null, ['ns1', 'ns2']);
+    trackWebViewEvent({ properties: atomic }, ['ns1', 'ns2']);
 
     expect(messageHandler).toHaveBeenCalledWith({
       atomicProperties: JSON.stringify(atomic),
@@ -65,7 +65,7 @@ describe('iOS interface', () => {
       },
     };
 
-    trackWebViewEvent(atomic, event, null, null);
+    trackWebViewEvent({ properties: atomic, event: event });
 
     expect(messageHandler).toHaveBeenCalledWith({
       atomicProperties: JSON.stringify(atomic),
@@ -83,7 +83,7 @@ describe('iOS interface', () => {
       },
     };
 
-    trackWebViewEvent({}, null, [entity], null);
+    trackWebViewEvent({ properties: {}, context: [entity] });
 
     expect(messageHandler).toHaveBeenCalledWith({
       atomicProperties: '{}',
