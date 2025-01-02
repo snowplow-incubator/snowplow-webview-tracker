@@ -96,10 +96,10 @@ export function hasMobileInterface(): boolean {
 
 /**
  * Track a web event.
+ * This method allows the tracking of any Snowplow event. It is used by the Snowplow web tracker WebView plugin to forward events to mobile trackers.
+ * Use this method to track either Self-Describing events, which are described by schemas, or that are not i.e. PageView and Structured events.
  *
- * @param atomicProperties - The atomic properties
- * @param event - Self-describing event information
- * @param entities - Entities to attach to the event
+ * @param event - Event information
  * @param trackers - The tracker identifiers which the event will be sent to
  */
 export function trackWebViewEvent(
