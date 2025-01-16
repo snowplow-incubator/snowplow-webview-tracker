@@ -38,22 +38,40 @@ export interface SelfDescribingEvent {
 }
 
 /**
- * A Structured Event
- * A classic style of event tracking, allows for easier movement between analytics
- * systems. A loosely typed event, creating a Self Describing event is preferred, but
- * useful for interoperability.
+ * Event properties that are sent directly, not as part of a self-describing schema.
+ * These properties will have their own column in the warehouse event table.
  */
-export interface StructuredEvent {
-  /** Name you for the group of objects you want to track e.g. "media", "ecomm". */
-  category: string;
-  /** Defines the type of user interaction for the web object. */
-  action: string;
-  /** Identifies the specific object being actioned. */
+export interface AtomicProperties {
+  /** Type of event, e.g. "pp" for page ping. */
+  eventName?: string;
+  /** Version of the tracker used. */
+  trackerVersion?: string;
+  /** The browser useragent. */
+  useragent?: string;
+  /** For page view events. The page URL. */
+  url?: string;
+  /** For page view events. The page title. */
+  title?: string;
+  /** For page view events. The referrer URL. */
+  referrer?: string;
+  /** For structured events. Name for the group of objects you want to track. */
+  category?: string;
+  /** For structured events. Defines the type of user interaction for the web object. */
+  action?: string;
+  /** For structured events. Identifies the specific object being actioned. */
   label?: string;
-  /** Describes the object or the action performed on it. */
+  /** For structured events. Describes the object or the action performed on it. */
   property?: string;
-  /** Quantifies or further describes the user action. */
+  /** For structured events. Quantifies or further describes the user action. */
   value?: number;
+  /** For page ping events. The minimum X offset. */
+  minXOffset?: number;
+  /** For page ping events. The maximum X offset. */
+  maxXOffset?: number;
+  /** For page ping events. The minimum Y offset. */
+  minYOffset?: number;
+  /** For page ping events. The maximum Y offset. */
+  maxYOffset?: number;
 }
 
 /**
@@ -91,10 +109,34 @@ interface FullPageViewEvent extends PageViewEvent {
   referrer?: string;
 }
 
+/**
+ * A Structured Event
+ * A classic style of event tracking, allows for easier movement between analytics
+ * systems. A loosely typed event, creating a Self Describing event is preferred, but
+ * useful for interoperability.
+ */
+export interface StructuredEvent {
+  /** Name you for the group of objects you want to track e.g. "media", "ecomm". */
+  category: string;
+  /** Defines the type of user interaction for the web object. */
+  action: string;
+  /** Identifies the specific object being actioned. */
+  label?: string;
+  /** Describes the object or the action performed on it. */
+  property?: string;
+  /** Quantifies or further describes the user action. */
+  value?: number;
+}
+
 /** Additional data points to set when tracking an event */
 export interface CommonEventProperties {
   /** Add context to an event by setting an Array of Self Describing JSON */
   context?: Array<SelfDescribingJson> | null;
+}
+
+export interface WebViewEvent {
+  properties: AtomicProperties;
+  event?: SelfDescribingEvent;
 }
 
 /** Interface for communicating with the Android mobile tracker */
@@ -134,6 +176,16 @@ export type SnowplowWebInterface = {
   ) => void;
 };
 
+/** Interface for communicating with the Android mobile tracker from v6.1+ onwards */
+export type SnowplowWebInterfaceV2 = {
+  trackWebViewEvent: (
+    atomicProperties: string,
+    selfDescribingEventData?: string | null,
+    context?: string | null,
+    trackers?: Array<string> | null
+  ) => void;
+};
+
 /** Interface for communicating with the iOS mobile tracker */
 export type WebkitMessageHandler = {
   postMessage: (message: {
@@ -148,6 +200,16 @@ export type WebkitMessageHandler = {
   }) => void;
 };
 
+/** Interface for communicating with the iOS mobile tracker from v6.1+ onwards */
+export type WebkitMessageHandlerV2 = {
+  postMessage: (message: {
+    atomicProperties: string;
+    selfDescribingEventData?: string | null;
+    context?: string | null;
+    trackers?: Array<string> | null;
+  }) => void;
+};
+
 /** Interface for communicating with the React Native tracker */
 export type ReactNativeInterface = {
   postMessage: (message: string) => void;
@@ -156,9 +218,11 @@ export type ReactNativeInterface = {
 declare global {
   interface Window {
     SnowplowWebInterface?: SnowplowWebInterface;
+    SnowplowWebInterfaceV2?: SnowplowWebInterfaceV2;
     webkit?: {
       messageHandlers?: {
         snowplow?: WebkitMessageHandler;
+        snowplowV2?: WebkitMessageHandlerV2;
       };
     };
     ReactNativeWebView?: ReactNativeInterface;
