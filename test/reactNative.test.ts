@@ -16,6 +16,7 @@ import {
   trackStructEvent,
   trackWebViewEvent,
 } from '../src';
+import { AtomicProperties } from '../src/api';
 
 describe('React Native interface', () => {
   let windowSpy: any;
@@ -36,14 +37,14 @@ describe('React Native interface', () => {
   });
 
   it('track a webview primitive event', () => {
-    const atomic = {
+    const atomic: AtomicProperties = {
       eventName: 'pp',
       trackerVersion: 'webview',
-      url: 'http://test.com',
-      minXOffset: 20,
-      maxXOffset: 30,
-      minYOffset: 40,
-      maxYOffset: 50,
+      pageUrl: 'http://test.com',
+      pingXOffsetMin: 20,
+      pingXOffsetMax: 30,
+      pingYOffsetMin: 40,
+      pingYOffsetMax: 50,
     };
 
     trackWebViewEvent({ properties: atomic }, ['ns1', 'ns2']);
@@ -54,11 +55,11 @@ describe('React Native interface', () => {
         event: {
           eventName: 'pp',
           trackerVersion: 'webview',
-          url: 'http://test.com',
-          minXOffset: 20,
-          maxXOffset: 30,
-          minYOffset: 40,
-          maxYOffset: 50,
+          pageUrl: 'http://test.com',
+          pingXOffsetMin: 20,
+          pingXOffsetMax: 30,
+          pingYOffsetMin: 40,
+          pingYOffsetMax: 50,
         },
         trackers: ['ns1', 'ns2'],
       })
@@ -66,7 +67,7 @@ describe('React Native interface', () => {
   });
 
   it('tracks a webview self-describing event', () => {
-    const atomic = {
+    const atomic: AtomicProperties = {
       eventName: 'ue',
       trackerVersion: 'webview',
     };

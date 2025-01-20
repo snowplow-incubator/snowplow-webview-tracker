@@ -49,9 +49,9 @@ export interface AtomicProperties {
   /** The browser useragent. */
   useragent?: string;
   /** For page view events. The page URL. */
-  url?: string;
+  pageUrl?: string;
   /** For page view events. The page title. */
-  title?: string;
+  pageTitle?: string;
   /** For page view events. The referrer URL. */
   referrer?: string;
   /** For structured events. Name for the group of objects you want to track. */
@@ -65,13 +65,13 @@ export interface AtomicProperties {
   /** For structured events. Quantifies or further describes the user action. */
   value?: number;
   /** For page ping events. The minimum X offset. */
-  minXOffset?: number;
+  pingXOffsetMin?: number;
   /** For page ping events. The maximum X offset. */
-  maxXOffset?: number;
+  pingXOffsetMax?: number;
   /** For page ping events. The minimum Y offset. */
-  minYOffset?: number;
+  pingYOffsetMin?: number;
   /** For page ping events. The maximum Y offset. */
-  maxYOffset?: number;
+  pingYOffsetMax?: number;
 }
 
 /**
