@@ -1,3 +1,7 @@
+# 0.3.1
+
+* Fix atomic property keys in trackWebViewEvent
+
 # 0.3.0
 
 * Integrate with new mobile interfaces (#19)
